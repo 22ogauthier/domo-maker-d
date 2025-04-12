@@ -2,6 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
+const db = require('mongoose');
 
 const handleDomo = (e, onDomoAdded) => {
     e.preventDefault();
@@ -28,7 +29,7 @@ const DomoForm = (props) => {
             action="/maker"
             method="POST"
             className="domoForm"
-            style = {{padding: '10px', display: 'flex', width: '100%' }}
+            style={{ padding: '10px', display: 'flex', width: '100%' }}
         >
             <label htmlFor="name">Name: </label>
             <input id="domoName" type="text" name="name" placeholder="Domo Name" />
@@ -38,13 +39,33 @@ const DomoForm = (props) => {
 
             <label htmlFor="color">Color: </label>
             <input id="domoColor" type="text" name="color" placeholder="Domo Color" />
-            <input className="makeDomoSubmit" type="submit" value="Make Domo" style={{padding: '10px'}}/>
+            <input className="makeDomoSubmit" type="submit" value="Make Domo" style={{ padding: '10px' }} />
         </form>
     );
 };
 
 const DomoList = (props) => {
     const [domos, setDomos] = useState(props.domos);
+
+    //help from ChatGPT
+    const handleDeleteDomo = async (domoId) => {
+        const response = await fetch('/deleteDomo', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: domoId }),
+        });
+
+        const result = await response.json();
+
+        if(result.message === 'Domo deleted!') {
+            console.log('Domo deleted!');
+            props.triggerReload();
+        } else {
+            console.error('Failure to delete');
+        }
+    }
 
     useEffect(() => {
         const loadDomosFromServer = async () => {
@@ -63,6 +84,7 @@ const DomoList = (props) => {
         );
     }
 
+
     const domoNodes = domos.map(domo => {
         return (
             <div key={domo.id} className="domo">
@@ -70,6 +92,10 @@ const DomoList = (props) => {
                 <h3 className="domoName">Name: {domo.name}</h3>
                 <h3 className="domoAge">Age: {domo.age}</h3>
                 <h3 className="domoColor">Color: {domo.color}</h3>
+                <button className="deleteButton" onClick={() => {
+                    console.log("delete domo with: ", domo._id);
+                    handleDeleteDomo(domo._id)
+                }}>Delete</button>
             </div>
         );
     });
@@ -90,7 +116,7 @@ const App = () => {
                 <DomoForm triggerReload={() => setReloadDomos(!reloadDomos)} />
             </div>
             <div id="domos">
-                <DomoList domos={[]} reloadDomos={reloadDomos} />
+                <DomoList domos={[]} reloadDomos={reloadDomos} triggerReload={() => setReloadDomos(!reloadDomos)}/>
             </div>
         </div>
     );
