@@ -6,6 +6,7 @@ const makerPage = (req, res) => {
 };
 
 const getDomos = async (req, res) => {
+    console.log("getDomos called!");
     try {
         const query = {owner: req.session.account._id};
         const docs = await Domo.find(query).select('name age').lean().exec();
@@ -31,7 +32,7 @@ const makeDomo = async (req, res) => {
     try {
         const newDomo = new Domo(domoData);
         await newDomo.save();
-        return res.json({ redirect: '/maker' });
+        return res.status(201).json({name: newDomo.name, age: newDomo.age});
     } catch (err) {
         console.log(err);
         if (err.code === 11000) {
