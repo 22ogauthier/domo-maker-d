@@ -73,7 +73,7 @@ const SignUpWindow = (props) => {
             <input id="pass" type="password" name="pass" placeholder="password"></input>
             <label htmlFor="pass">Password: </label>
             <input id="pass2" type="password" name="pass2" placeholder="password"></input>
-            <input className="formSubmit" type="submit" value="Sign in"></input>
+            <input className="formSubmit" type="submit" value="Sign up"></input>
         </form>
     );
 };
