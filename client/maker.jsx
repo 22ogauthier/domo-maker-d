@@ -73,3 +73,25 @@ const DomoList = (props) => {
         </div>
     );
 };
+
+const App = () => {
+    const [reloadDomos, setReloadDomos] = useState(false);
+
+    return (
+        <div>
+            <div id="makeDomo">
+                <DomoForm triggerReload={() => setReloadDomos(!reloadDomos)} />
+            </div>
+            <div id="domos">
+                <DomoList domos={[]} reloadDomos={reloadDomos} />
+            </div>
+        </div>
+    );
+};
+
+const init = () => {
+    const root = createRoot(document.getElementById('app'));
+    root.render(<App/>);
+};
+
+window.onload = init;
