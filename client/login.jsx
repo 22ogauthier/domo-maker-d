@@ -57,3 +57,23 @@ const LoginWindow = (props) => {
         </form>
     );
 };
+
+const SignUpWindow = (props) => {
+    return (
+        <form id="signUpForm"
+            name="signUpForm"
+            onSubmit={handleSignup}
+            action="/signUp"
+            method="POST"
+            className="mainForm"
+        >
+            <label htmlFor="username">Username:</label>
+            <input id="user" type="text" name="username" placeholder="username"></input>
+            <label htmlFor="pass">Password: </label>
+            <input id="pass" type="password" name="pass" placeholder="password"></input>
+            <label htmlFor="pass">Password: </label>
+            <input id="pass2" type="password" name="pass2" placeholder="password"></input>
+            <input className="formSubmit" type="submit" value="Sign in"></input>
+        </form>
+    );
+};
